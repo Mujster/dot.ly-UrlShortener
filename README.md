@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Login / Signup Service to store urls will be available in next update. 
 
+#Screenshots
+![Image](1.PNG)
+![Image](2.PNG)
+
 ## Available Scripts
 
 In the project directory, you can run:
