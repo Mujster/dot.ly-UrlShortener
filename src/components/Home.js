@@ -2,40 +2,57 @@ import {React,useState} from "react";
 import '../styles/navbar.css'
 import { FiLink,FiCopy} from "react-icons/fi";
 import axios from "axios";
+import {ToastContainer,toast}from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Home=()=>{
     const [inputValue, setInputValue] = useState('');
+    const [Loader,setLoader]=useState(false);
     const [copyBtn,setcopyBtn]=useState(false);
     const [Heading,setHeading]=useState(false);
     let uniqueCode="";
     const [RedirectUrl,setRedirectUrl]=useState('');
     const [buttontext,Setbuttontext]=useState('');
     const redirectPage=()=>{
-        window.location.replace(`http://localhost:3001/${RedirectUrl}`);
-      }
+        window.location.replace(`${RedirectUrl}`);
+    }
+    const notify = () => {  
+        toast("Not Available Yet")
+    };
     const shortenUrl= async()=>{  
+        if(inputValue!==''){
+        setLoader(true); 
         try{
-            const apiResponse= await axios.post("http://localhost:3001/shorten",{ InputUrl: inputValue });
+            const apiResponse= await axios.post("https://dot-ly.cyclic.app/shorten",{ InputUrl: inputValue });
             uniqueCode=apiResponse.data.existingUrl.NewUrl;
-            let NewRedirectUrl=`dot.ly/${uniqueCode}`;
+            let NewRedirectUrl=`https://dot-ly.cyclic.app/dot.ly/${uniqueCode}`;
             Setbuttontext(NewRedirectUrl);
             setRedirectUrl(NewRedirectUrl);
             setcopyBtn(true); 
             setHeading(true);
+            setLoader(false);
         }
         catch(error){
             console.log(error);
         }
+      }
+      else{
+        toast("Please Enter url");
+      }
     };
     const HandleChangeValue=(event)=>{
         setInputValue(event.target.value);
+        Setbuttontext('');
+        setcopyBtn(false);  
+        setHeading(false);
     };
     return(
         <div> 
         <div className="navbar">
            <button className="logo-btn" onClick={()=>{window.location.reload(false)}}><h1>dot.ly </h1><FiLink size={30} /></button>
              <label className="theme-switch">
-              <input type="checkbox" className="theme-switch__checkbox"/>
+              <input type="checkbox" className="theme-switch__checkbox"onClick={notify}/>
               <div className="theme-switch__container">
                 <div className="theme-switch__clouds"></div>
                 <div className="theme-switch__stars-container">
@@ -54,7 +71,8 @@ const Home=()=>{
                 </div>
               </div>
             </label>  
-            <button className="Login-btn"><h3>Login/Signup</h3></button>          
+            <ToastContainer />
+            <button className="Login-btn" onClick={notify}><h3>Login/Signup</h3></button>  
         </div>
         <div className="container">
             <div>
@@ -78,8 +96,9 @@ const Home=()=>{
             </div>
             <div className="url-container">
                 {Heading&&(<h1>Generated Url</h1>)}
-                <button className="link-btn" onClick={redirectPage}>{buttontext}</button>
-                {copyBtn&&(<button className="copy-btn" ><FiCopy size={30}/></button>)}
+                <button className="link-btn" onClick={redirectPage} >{buttontext}</button>
+                {copyBtn&&(<button className="copy-btn" onClick={()=>toast("Not Available yet")}><FiCopy size={30}/></button>)}
+                {Loader&&(<div className="loader"></div>)}
             </div>
             </div>
             <img className="homevector" src="vector.png" alt="img"/>
