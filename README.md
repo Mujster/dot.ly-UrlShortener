@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Backend Service Implemented using Express and MongoDb Atlas for continous service
+
+## Login / Signup Service to store urls will be available in next update. 
+
 ## Available Scripts
 
 In the project directory, you can run:
